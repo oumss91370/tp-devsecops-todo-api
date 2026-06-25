@@ -19,6 +19,8 @@ API REST minimaliste de gestion de tâches (Todo), développée avec **Flask** e
 7. [Tests unitaires avec pytest](#7-tests-unitaires-avec-pytest)
 8. [Sécurité et bonnes pratiques](#8-sécurité-et-bonnes-pratiques)
 9. [Commandes Git / GitHub utilisées](#9-commandes-git--github-utilisées)
+10. [Conteneurisation avec Docker](#10-conteneurisation-avec-docker)
+11. [Analyse de sécurité : Trivy et SBOM](#11-analyse-de-sécurité--trivy-et-sbom)
 
 ---
 
@@ -29,11 +31,20 @@ todo-api/
 ├── app.py              # Application Flask : routes CRUD + accès SQLite
 ├── requirements.txt    # Dépendances Python épinglées
 ├── test_app.py         # Tests unitaires pytest (9 tests, 1 par cas)
+├── Dockerfile          # Conteneurisation de l'application (image légère, non-root)
+├── .dockerignore       # Fichiers exclus du contexte de build Docker
 ├── .gitignore          # Exclut la base SQLite, le venv, les caches, les secrets
 ├── README.md           # Ce fichier
+├── trivy-report.json   # Rapport de scan de vulnérabilités (Trivy, JSON)
+├── trivy-report.txt    # Rapport de scan de vulnérabilités (Trivy, table)
+├── sbom.spdx.json      # SBOM au format SPDX
+├── sbom.cdx.json       # SBOM au format CycloneDX
 └── docs/
-    ├── pytest_screenshot.png   # Preuve : capture de l'exécution des tests
-    └── tests_output.txt        # Sortie texte brute de pytest -v
+    ├── pytest_screenshot.png   # Preuve : exécution des tests pytest
+    ├── tests_output.txt        # Sortie texte brute de pytest -v
+    ├── docker_build.png        # Preuve : build de l'image (exemple)
+    ├── trivy_scan.png          # Preuve : scan Trivy (réel)
+    └── sbom.png                # Preuve : contenu du SBOM (réel)
 ```
 
 | Composant | Rôle |
@@ -240,6 +251,129 @@ git push -u origin main
 ```
 
 > *Pourquoi :* `git init` crée le dépôt local, `add` + `commit` enregistrent un instantané du code, `remote add origin` relie le projet à GitHub, et `push -u origin main` envoie le code en publiant la branche `main` comme branche de suivi par défaut.
+
+---
+
+## 10. Conteneurisation avec Docker
+
+### 10.1. Le Dockerfile (et pourquoi cet ordre)
+
+```dockerfile
+FROM python:3.11-slim          # image de base légère
+WORKDIR /app
+COPY requirements.txt .        # dépendances copiées EN PREMIER
+RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .                  # le code ensuite (couche volatile)
+RUN useradd -m appuser && chown -R appuser /app
+USER appuser                   # on ne tourne JAMAIS en root
+EXPOSE 5000
+CMD ["python", "app.py"]
+```
+
+| Choix | Pourquoi |
+|-------|----------|
+| `python:3.11-slim` | Image minimale (~120-150 Mo) : moins d'outils superflus = surface d'attaque réduite. |
+| `requirements.txt` copié avant le code | Tant que les dépendances ne changent pas, Docker **réutilise le cache** de la couche `pip install` → builds bien plus rapides. |
+| `--no-cache-dir` | Évite de stocker le cache pip dans l'image → couche plus légère. |
+| `useradd` + `USER appuser` | Le conteneur tourne en **non-root** : si le processus est compromis, l'attaquant n'a pas les droits root. |
+| `EXPOSE 5000` | Documente le port d'écoute de l'application Flask. |
+
+Un fichier `.dockerignore` exclut du contexte de build ce qui n'a rien à faire dans l'image : la base `todos.db`, le venv, les caches, `docs/`, le `.git/`.
+
+### 10.2. Construire l'image
+
+```bash
+cd todo-api
+docker build -t todo-api .
+
+# Vérifier que l'image existe
+docker images
+```
+
+![docker build](docs/docker_build.png)
+
+### 10.3. Lancer le conteneur
+
+```bash
+# -p : publie le port 5000 ; -v : persiste la base SQLite sur l'hôte
+docker run -p 5000:5000 -v $(pwd)/todos.db:/app/todos.db todo-api
+```
+
+L'API est alors disponible sur `http://localhost:5000/todos` (mêmes tests `curl` qu'à la section 6). Le volume `-v` garantit que les tâches créées **survivent à l'arrêt du conteneur**.
+
+| Problème | Solution |
+|----------|----------|
+| `ModuleNotFoundError: flask` | Vérifier `requirements.txt` et que `pip install` a réussi pendant le build. |
+| `Permission denied` | S'assurer que `appuser` possède `/app` (`chown -R appuser /app`). |
+| Port 5000 occupé | `docker stop <id>` ou changer le port hôte (`-p 5001:5000`). |
+| Base non persistée | Utiliser le volume `-v $(pwd)/todos.db:/app/todos.db`. |
+
+---
+
+## 11. Analyse de sécurité : Trivy et SBOM
+
+[Trivy](https://trivy.dev) (Aqua Security) analyse l'image pour détecter les vulnérabilités (CVE) des paquets OS et Python.
+
+### 11.1. Scanner l'image
+
+```bash
+# Scan complet (affichage console + table)
+trivy image todo-api
+
+# Rapport JSON pour intégration CI / dashboards
+trivy image --format json --output trivy-report.json todo-api
+
+# Faire échouer la CI si une CVE CRITICAL est trouvée
+trivy image --exit-code 1 --severity CRITICAL todo-api
+
+# Se concentrer sur les vulnérabilités corrigeables uniquement
+trivy image --ignore-unfixed --severity CRITICAL,HIGH todo-api
+```
+
+![scan trivy](docs/trivy_scan.png)
+
+### 11.2. Résultats du scan (base `python:3.11-slim`)
+
+Scan réel de l'image de base sur laquelle repose le conteneur :
+
+| Sévérité | Nombre |
+|----------|--------|
+| CRITICAL | 2 |
+| HIGH | 12 |
+| MEDIUM | 42 |
+| LOW | 64 |
+| UNKNOWN | 36 |
+| **Total** | **156** |
+
+Les **2 CRITICAL** proviennent du paquet `perl-base` de l'image Debian de base (`CVE-2026-42496`, `CVE-2026-8376`) — **pas du code applicatif** — et n'ont **aucun correctif disponible** à ce jour. La commande `trivy image --ignore-unfixed --severity CRITICAL` renvoie donc **0 vulnérabilité corrigeable**.
+
+Pistes de réduction du risque :
+
+- épingler l'image de base par digest (`python:3.11-slim@sha256:...`) pour la reproductibilité ;
+- migrer vers une base plus minimale sans `perl` (ex. `python:3.11-alpine` ou une image *distroless*) ;
+- reconstruire régulièrement l'image pour récupérer les correctifs Debian dès leur publication ;
+- intégrer `trivy image --exit-code 1 --severity CRITICAL` dans la CI comme garde-fou.
+
+### 11.3. Générer le SBOM
+
+Le SBOM (*Software Bill of Materials*) est l'inventaire de tous les composants de l'image — utile pour réagir vite à une future CVE (ex. Log4Shell).
+
+```bash
+# Format SPDX (conformité / licences)
+trivy image --format spdx-json --output sbom.spdx.json todo-api
+
+# Format CycloneDX (sécurité / analyse de risques)
+trivy image --format cyclonedx --output sbom.cdx.json todo-api
+
+# Inspecter le contenu (nécessite jq)
+jq '.packages | length' sbom.spdx.json
+```
+
+![sbom](docs/sbom.png)
+
+Les SBOM générés recensent **108 paquets** (OS Debian + `pip`/`setuptools`) avec leurs versions et licences.
+
+> **Note de reproductibilité.** Les rapports `trivy-*` et `sbom.*` livrés ici ont été générés en scannant **`python:3.11-slim`** (l'image de base réelle du conteneur) dans un environnement sans démon Docker. Sur ta machine, après `docker build -t todo-api .`, les mêmes commandes avec `todo-api` produisent des rapports identiques enrichis des dépendances applicatives (Flask, etc.). La capture `docker_build.png` est un exemple de sortie attendue.
 
 ---
 

@@ -1,0 +1,19 @@
+# Ne pas embarquer la base SQLite dans l'image
+*.db
+todos.db
+todos_test.db
+
+# Tests, docs et environnements ne servent pas au runtime
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.git/
+.gitignore
+docs/
+*.md
+
+# Rapports de sécurité générés
+trivy-report.*
+sbom.*.json
