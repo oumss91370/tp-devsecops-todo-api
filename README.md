@@ -21,6 +21,7 @@ API REST minimaliste de gestion de tâches (Todo), développée avec **Flask** e
 9. [Commandes Git / GitHub utilisées](#9-commandes-git--github-utilisées)
 10. [Conteneurisation avec Docker](#10-conteneurisation-avec-docker)
 11. [Analyse de sécurité : Trivy et SBOM](#11-analyse-de-sécurité--trivy-et-sbom)
+12. [Déploiement et promotion sur DockerHub](#12-déploiement-et-promotion-sur-dockerhub)
 
 ---
 
@@ -33,6 +34,7 @@ todo-api/
 ├── test_app.py         # Tests unitaires pytest (9 tests, 1 par cas)
 ├── Dockerfile          # Conteneurisation de l'application (image légère, non-root)
 ├── .dockerignore       # Fichiers exclus du contexte de build Docker
+├── docker-compose.yml  # Déploiement de l'image DockerHub (1 commande)
 ├── .gitignore          # Exclut la base SQLite, le venv, les caches, les secrets
 ├── README.md           # Ce fichier
 ├── trivy-report.json   # Rapport de scan de vulnérabilités (Trivy, JSON)
@@ -393,6 +395,105 @@ jq '.packages | length' sbom.spdx.json
 Les SBOM générés recensent **119 paquets** (OS Debian + dépendances Python : `Flask`, `Werkzeug`, `Jinja2`, `click`, `pip`, `pytest`…) avec leurs versions et licences.
 
 > **Note.** Les rapports `trivy-report.*` et `sbom.*` du dépôt sont générés en scannant l'image `todo-api` construite localement (`docker build -t todo-api .`). La capture `docker_build.png` illustre la sortie d'un build.
+
+---
+
+## 12. Déploiement et promotion sur DockerHub
+
+> Dans toutes les commandes ci-dessous, remplacer `VOTRE_USERNAME` par votre identifiant DockerHub (visible en haut à droite sur [hub.docker.com](https://hub.docker.com)).
+
+### 12.1. Se connecter à DockerHub
+
+```bash
+docker login
+```
+
+> Si le compte a été créé via **GitHub/Google (SSO)**, il n'y a pas de mot de passe Docker : générer un **jeton d'accès personnel** sur *Account Settings → Personal access tokens*, puis l'utiliser comme mot de passe lors du `docker login -u VOTRE_USERNAME`.
+
+### 12.2. Taguer puis pousser l'image
+
+On publie deux tags : un **immuable** (`v1.0.0`, traçable) et `latest` (pratique mais mouvant).
+
+```bash
+# Taguer l'image locale avec le namespace DockerHub
+docker tag todo-api VOTRE_USERNAME/todo-api:latest
+docker tag todo-api VOTRE_USERNAME/todo-api:v1.0.0
+
+# Pousser les deux tags
+docker push VOTRE_USERNAME/todo-api:latest
+docker push VOTRE_USERNAME/todo-api:v1.0.0
+```
+
+L'image est alors visible sur `https://hub.docker.com/r/VOTRE_USERNAME/todo-api` avec les tags `latest` et `v1.0.0`.
+
+| Problème | Solution |
+|----------|----------|
+| `denied: requested access to the resource is denied` | Vérifier `docker login` et que le tag commence bien par `VOTRE_USERNAME/`. |
+| `no basic auth credentials` | Lancer `docker login` avant le `push`. |
+| Image trop lourde | Base plus légère (`python:3.11-alpine`) ou multi-stage build. |
+
+### 12.3. Déployer l'application
+
+**Option A — `docker run`** (sur un serveur, après `docker pull`) :
+
+```bash
+docker pull VOTRE_USERNAME/todo-api:latest
+mkdir -p data
+docker run -d --name todo-app -p 80:5000 \
+  -e DB_PATH=/data/todos.db -v $(pwd)/data:/data \
+  VOTRE_USERNAME/todo-api:latest
+```
+
+**Option B — Docker Compose** (recommandé, voir `docker-compose.yml`) :
+
+```bash
+docker compose up -d      # démarre en arrière-plan
+docker compose ps         # état des services
+docker compose logs -f    # suivre les logs
+docker compose down       # arrêter et supprimer
+```
+
+L'API est accessible sur `http://localhost/todos` (port 80) puis on vérifie :
+
+```bash
+docker ps                 # le conteneur doit être "Up"
+curl http://localhost/todos
+```
+
+**Option C — Kubernetes** (déploiement type) :
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: todo-api }
+  template:
+    metadata:
+      labels: { app: todo-api }
+    spec:
+      containers:
+        - name: todo-api
+          image: VOTRE_USERNAME/todo-api:v1.0.0   # tag immuable en prod
+          ports:
+            - containerPort: 5000
+```
+
+```bash
+kubectl apply -f deployment.yaml
+kubectl expose deployment todo-api --port=80 --target-port=5000 --type=LoadBalancer
+```
+
+### 12.4. Bonnes pratiques de publication
+
+- **Tags immuables** (`v1.0.0`, `v1.1.0`) pour les releases ; on déploie un tag précis en production, jamais `latest` (mouvant et difficile à tracer).
+- **Promotion d'artefact** : on pousse *la même image* (par digest) de dev → staging → prod, sans la reconstruire entre les environnements.
+- **Sécurité** : ne jamais committer de mot de passe ou de jeton DockerHub ; utiliser des jetons d'accès personnels révocables ; restreindre les droits d'écriture du dépôt.
+- **Documentation DockerHub** : ajouter une description (usage, port `5000`, variable `DB_PATH`) sur la page du dépôt.
+- **Automatisation** : déclencher build + scan Trivy + push via la CI (GitHub Actions / GitLab CI) à chaque tag de version.
 
 ---
 
