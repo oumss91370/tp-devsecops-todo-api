@@ -48,7 +48,8 @@ todo-api/
     ├── docker_build.png        # Preuve : build de l'image
     ├── docker_logs.png         # Preuve : logs du conteneur (GET 200 / POST 201)
     ├── trivy_scan.png          # Preuve : scan Trivy (image todo-api)
-    └── sbom.png                # Preuve : contenu du SBOM
+    ├── sbom.png                # Preuve : contenu du SBOM
+    └── app_browser.png         # Preuve : application accessible dans le navigateur
 ```
 
 | Composant | Rôle |
@@ -466,6 +467,10 @@ L'API est accessible sur `http://localhost/todos` (port 80) puis on vérifie :
 docker ps                 # le conteneur doit être "Up"
 curl http://localhost/todos
 ```
+
+Réponse de l'application dans le navigateur (une tâche créée) :
+
+![application dans le navigateur](docs/app_browser.png)
 
 **Option C — Kubernetes** (déploiement type) :
 
