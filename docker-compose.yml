@@ -1,12 +1,11 @@
 # Déploiement de l'API Todo depuis l'image publiée sur DockerHub.
-# Avant de lancer : remplacer VOTRE_USERNAME par votre identifiant DockerHub,
-# puis exécuter :  docker compose up -d
+# Lancer simplement :  docker compose up -d
 #
 # (La clé "version:" est volontairement omise : elle est obsolète avec Docker Compose v2.)
 
 services:
   todo-api:
-    image: VOTRE_USERNAME/todo-api:latest   # image tirée depuis DockerHub
+    image: oumsz/todo-api:latest   # image tirée depuis DockerHub
     container_name: todo-api
     ports:
       - "80:5000"                # http://localhost/todos   (port hôte 80 -> 5000 du conteneur)
