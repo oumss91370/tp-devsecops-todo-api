@@ -5,6 +5,7 @@ API REST minimaliste de gestion de tâches (Todo), développée avec **Flask** e
 [![tests](https://img.shields.io/badge/tests-9%20passed-brightgreen)](docs/pytest_screenshot.png)
 [![python](https://img.shields.io/badge/python-3.10%2B-blue)](https://www.python.org/)
 [![flask](https://img.shields.io/badge/flask-3.0.0-black)](https://flask.palletsprojects.com/)
+[![DockerHub](https://img.shields.io/badge/DockerHub-oumsz%2Ftodo--api-2496ED?logo=docker&logoColor=white)](https://hub.docker.com/r/oumsz/todo-api)
 
 ---
 
@@ -400,7 +401,13 @@ Les SBOM générés recensent **119 paquets** (OS Debian + dépendances Python :
 
 ## 12. Déploiement et promotion sur DockerHub
 
-> Dans toutes les commandes ci-dessous, remplacer `VOTRE_USERNAME` par votre identifiant DockerHub (visible en haut à droite sur [hub.docker.com](https://hub.docker.com)).
+**Image publiée : https://hub.docker.com/r/oumsz/todo-api** — tags `latest` et `v1.0.0` (digest `sha256:9323…`, ~50 Mo).
+
+```bash
+docker pull oumsz/todo-api:v1.0.0
+```
+
+> Dans les commandes ci-dessous, `VOTRE_USERNAME` correspond à l'identifiant DockerHub (ici `oumsz`), visible en haut à droite sur [hub.docker.com](https://hub.docker.com).
 
 ### 12.1. Se connecter à DockerHub
 
