@@ -42,9 +42,10 @@ todo-api/
 └── docs/
     ├── pytest_screenshot.png   # Preuve : exécution des tests pytest
     ├── tests_output.txt        # Sortie texte brute de pytest -v
-    ├── docker_build.png        # Preuve : build de l'image (exemple)
-    ├── trivy_scan.png          # Preuve : scan Trivy (réel)
-    └── sbom.png                # Preuve : contenu du SBOM (réel)
+    ├── docker_build.png        # Preuve : build de l'image
+    ├── docker_logs.png         # Preuve : logs du conteneur (GET 200 / POST 201)
+    ├── trivy_scan.png          # Preuve : scan Trivy (image todo-api)
+    └── sbom.png                # Preuve : contenu du SBOM
 ```
 
 | Composant | Rôle |
@@ -294,19 +295,35 @@ docker images
 
 ### 10.3. Lancer le conteneur
 
+On monte un **dossier** `data/` pour la persistance (et non le fichier `todos.db` directement, sinon Docker le crée comme un dossier et SQLite ne peut pas l'ouvrir). L'application place la base dans ce dossier grâce à la variable `DB_PATH` :
+
 ```bash
-# -p : publie le port 5000 ; -v : persiste la base SQLite sur l'hôte
-docker run -p 5000:5000 -v $(pwd)/todos.db:/app/todos.db todo-api
+# Linux / macOS
+mkdir -p data
+docker run -d --name todo -p 5000:5000 -e DB_PATH=/data/todos.db -v $(pwd)/data:/data todo-api
+
+# Windows PowerShell
+mkdir data -Force
+docker run -d --name todo -p 5000:5000 -e DB_PATH=/data/todos.db -v ${PWD}\data:/data todo-api
 ```
 
-L'API est alors disponible sur `http://localhost:5000/todos` (mêmes tests `curl` qu'à la section 6). Le volume `-v` garantit que les tâches créées **survivent à l'arrêt du conteneur**.
+L'API est alors disponible sur `http://localhost:5000/todos`. On vérifie que le conteneur tourne et on consulte ses logs :
+
+```bash
+docker ps            # STATUS doit afficher "Up ..."
+docker logs todo     # logs du serveur Flask + requêtes reçues
+```
+
+![docker logs](docs/docker_logs.png)
+
+Les logs montrent le serveur Flask démarré et les requêtes traitées (`GET /todos` → 200, `POST /todos` → 201) : preuve que le conteneur répond bien.
 
 | Problème | Solution |
 |----------|----------|
+| `unable to open database file` | Monter un **dossier** (`-v .../data:/data`) + `-e DB_PATH=/data/todos.db`, pas le fichier `todos.db` directement. |
+| `name "/todo" is already in use` | Supprimer l'ancien conteneur : `docker rm -f todo`, puis relancer. |
 | `ModuleNotFoundError: flask` | Vérifier `requirements.txt` et que `pip install` a réussi pendant le build. |
-| `Permission denied` | S'assurer que `appuser` possède `/app` (`chown -R appuser /app`). |
 | Port 5000 occupé | `docker stop <id>` ou changer le port hôte (`-p 5001:5000`). |
-| Base non persistée | Utiliser le volume `-v $(pwd)/todos.db:/app/todos.db`. |
 
 ---
 
@@ -332,20 +349,22 @@ trivy image --ignore-unfixed --severity CRITICAL,HIGH todo-api
 
 ![scan trivy](docs/trivy_scan.png)
 
-### 11.2. Résultats du scan (base `python:3.11-slim`)
+### 11.2. Résultats du scan (image `todo-api`)
 
-Scan réel de l'image de base sur laquelle repose le conteneur :
+Scan réel de l'image `todo-api` (paquets OS Debian **+** dépendances Python de l'application) :
 
 | Sévérité | Nombre |
 |----------|--------|
 | CRITICAL | 2 |
 | HIGH | 12 |
-| MEDIUM | 42 |
-| LOW | 64 |
+| MEDIUM | 43 |
+| LOW | 65 |
 | UNKNOWN | 36 |
-| **Total** | **156** |
+| **Total** | **158** |
 
-Les **2 CRITICAL** proviennent du paquet `perl-base` de l'image Debian de base (`CVE-2026-42496`, `CVE-2026-8376`) — **pas du code applicatif** — et n'ont **aucun correctif disponible** à ce jour. La commande `trivy image --ignore-unfixed --severity CRITICAL` renvoie donc **0 vulnérabilité corrigeable**.
+Les **2 CRITICAL** proviennent du paquet `perl-base` de l'image Debian de base (`CVE-2026-42496`, `CVE-2026-8376`) — **pas du code applicatif** — et sont marquées `fix_deferred`/`affected`, c'est-à-dire **sans correctif disponible** à ce jour. La commande `trivy image --ignore-unfixed --severity CRITICAL` renvoie donc **0 vulnérabilité corrigeable**.
+
+Côté dépendances Python, Trivy détecte des CVE de faible/moyenne gravité corrigeables en montant de version (ex. `Flask 3.0.0` → `3.1.3`, `wheel`, `pip`, `pytest`) ; pour un vrai durcissement on mettrait à jour `requirements.txt` puis on rescannerait.
 
 Pistes de réduction du risque :
 
@@ -371,9 +390,9 @@ jq '.packages | length' sbom.spdx.json
 
 ![sbom](docs/sbom.png)
 
-Les SBOM générés recensent **108 paquets** (OS Debian + `pip`/`setuptools`) avec leurs versions et licences.
+Les SBOM générés recensent **119 paquets** (OS Debian + dépendances Python : `Flask`, `Werkzeug`, `Jinja2`, `click`, `pip`, `pytest`…) avec leurs versions et licences.
 
-> **Note de reproductibilité.** Les rapports `trivy-*` et `sbom.*` livrés ici ont été générés en scannant **`python:3.11-slim`** (l'image de base réelle du conteneur) dans un environnement sans démon Docker. Sur ta machine, après `docker build -t todo-api .`, les mêmes commandes avec `todo-api` produisent des rapports identiques enrichis des dépendances applicatives (Flask, etc.). La capture `docker_build.png` est un exemple de sortie attendue.
+> **Note.** Les rapports `trivy-report.*` et `sbom.*` du dépôt sont générés en scannant l'image `todo-api` construite localement (`docker build -t todo-api .`). La capture `docker_build.png` illustre la sortie d'un build.
 
 ---
 

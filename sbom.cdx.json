@@ -2,10 +2,10 @@
   "$schema": "http://cyclonedx.org/schema/bom-1.7.schema.json",
   "bomFormat": "CycloneDX",
   "specVersion": "1.7",
-  "serialNumber": "urn:uuid:647ca288-3b2e-47d9-a393-7a33038f8ae8",
+  "serialNumber": "urn:uuid:2ebeb708-bdaa-4700-b520-e38431be8f11",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-06-25T09:53:53+00:00",
+    "timestamp": "2026-06-26T09:44:56+00:00",
     "tools": {
       "components": [
         {
@@ -20,14 +20,26 @@
       ]
     },
     "component": {
-      "bom-ref": "pkg:oci/python@sha256:cdbd05fb6f457ca275ff51ce00d93d865ca0b6a25f5ffb08262d94f6835771e5?arch=amd64&repository_url=index.docker.io%2Flibrary%2Fpython",
+      "bom-ref": "pkg:oci/todo-api@sha256:d113fff60b75cf06121ea760c3fbf59b5b35a7108f6f9e7a4c6e0d15e79bc8f4?arch=amd64&repository_url=index.docker.io%2Flibrary%2Ftodo-api",
       "type": "container",
-      "name": "python:3.11-slim",
-      "purl": "pkg:oci/python@sha256:cdbd05fb6f457ca275ff51ce00d93d865ca0b6a25f5ffb08262d94f6835771e5?arch=amd64&repository_url=index.docker.io%2Flibrary%2Fpython",
+      "name": "todo-api",
+      "purl": "pkg:oci/todo-api@sha256:d113fff60b75cf06121ea760c3fbf59b5b35a7108f6f9e7a4c6e0d15e79bc8f4?arch=amd64&repository_url=index.docker.io%2Flibrary%2Ftodo-api",
       "properties": [
         {
           "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:08d38095044443a6cf7322804cafb674206fe1b0eeb516d279d265b6792beb83"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:3edb2192497af6e965b9b7e57dc6dbdce1f3ea721d14a98110419d4ded523298"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:40396a79dba4a5b3c84a728c41bb8f390dd62bb2c5be9871cc60d1bfe5a1ea25"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:60abd7963981461628da46aedaea9f6689ea5094fce7505410c947b2b6e8c260"
         },
         {
           "name": "aquasecurity:trivy:DiffID",
@@ -39,23 +51,31 @@
         },
         {
           "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
+          "value": "sha256:d84b37c9e7771dafebeb1f54c67c9f6ebb0942aae9bf150e134646145a51ad61"
+        },
+        {
+          "name": "aquasecurity:trivy:DiffID",
           "value": "sha256:ea513af484240f6b70f27874908091da803bf00bbf032ca39c3d218abdd3cb4c"
         },
         {
           "name": "aquasecurity:trivy:ImageID",
-          "value": "sha256:b7486dbe03b34a981c9ef418082f056cd26418a77b83903a520cda36a6928333"
+          "value": "sha256:d113fff60b75cf06121ea760c3fbf59b5b35a7108f6f9e7a4c6e0d15e79bc8f4"
         },
         {
           "name": "aquasecurity:trivy:Reference",
-          "value": "python:3.11-slim"
+          "value": "todo-api:latest"
         },
         {
           "name": "aquasecurity:trivy:RepoDigest",
-          "value": "python@sha256:cdbd05fb6f457ca275ff51ce00d93d865ca0b6a25f5ffb08262d94f6835771e5"
+          "value": "todo-api@sha256:d113fff60b75cf06121ea760c3fbf59b5b35a7108f6f9e7a4c6e0d15e79bc8f4"
         },
         {
           "name": "aquasecurity:trivy:RepoTag",
-          "value": "python:3.11-slim"
+          "value": "todo-api:latest"
         },
         {
           "name": "aquasecurity:trivy:SchemaVersion",
@@ -63,17 +83,23 @@
         },
         {
           "name": "aquasecurity:trivy:Size",
-          "value": "129029120"
+          "value": "149377024"
         }
       ]
     }
   },
   "components": [
     {
-      "bom-ref": "06ddec28-fceb-49a5-b57f-9403f2bfc7e7",
+      "bom-ref": "7801c540-b3eb-4cf2-b25a-bd611687d420",
       "type": "library",
       "name": "wheel",
       "version": "0.45.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "6240a67a4c1cb1501e12755e659b71f8d78e2260"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -102,26 +128,16 @@
       ]
     },
     {
-      "bom-ref": "0cff4407-9e10-4796-aff7-6dc1b8975f4a",
-      "type": "operating-system",
-      "name": "debian",
-      "version": "13.5",
-      "properties": [
-        {
-          "name": "aquasecurity:trivy:Class",
-          "value": "os-pkgs"
-        },
-        {
-          "name": "aquasecurity:trivy:Type",
-          "value": "debian"
-        }
-      ]
-    },
-    {
-      "bom-ref": "f86ffc8c-ca63-4ebb-85f2-808f6c02dda2",
+      "bom-ref": "d6dda5c7-6775-4503-92f8-4f55b5909d86",
       "type": "library",
       "name": "wheel",
       "version": "0.45.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "6240a67a4c1cb1501e12755e659b71f8d78e2260"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -146,6 +162,22 @@
         {
           "name": "aquasecurity:trivy:PkgType",
           "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "de5c7cf7-a3a5-4459-9068-847d7d67748b",
+      "type": "operating-system",
+      "name": "debian",
+      "version": "13.5",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:Class",
+          "value": "os-pkgs"
+        },
+        {
+          "name": "aquasecurity:trivy:Type",
+          "value": "debian"
         }
       ]
     },
@@ -6904,6 +6936,12 @@
       "type": "library",
       "name": "autocommand",
       "version": "2.2.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4310db58f98c12b23286e5fa37f0e27abefb6a4a"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -6936,6 +6974,12 @@
       "type": "library",
       "name": "backports.tarfile",
       "version": "1.2.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "3dd8d93cf7695d1c9d7574751ab5b0dee5dd7f9a"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -6964,10 +7008,130 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/blinker@1.9.0",
+      "type": "library",
+      "name": "blinker",
+      "version": "1.9.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ad4a8785c95184e661411968cb86ba3353ab46c7"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/blinker@1.9.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/blinker-1.9.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/click@8.4.2",
+      "type": "library",
+      "name": "click",
+      "version": "8.4.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "15c458da4f9eca9b778ed9fb1bef4c3ad6d58970"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/click@8.4.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/click-8.4.2.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/flask@3.0.0",
+      "type": "library",
+      "name": "Flask",
+      "version": "3.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "10695320713d282f61b45843d3f2a07cc60a7581"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/flask@3.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/flask-3.0.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/importlib-metadata@8.0.0",
       "type": "library",
       "name": "importlib_metadata",
       "version": "8.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "e8c830d8b0942300c7c87b3b8fd15ea1396e07bd"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7000,6 +7164,12 @@
       "type": "library",
       "name": "inflect",
       "version": "7.3.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c37042adc0d1270485f4b8b5b9e085a274dc035b"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7028,10 +7198,92 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/iniconfig@2.3.0",
+      "type": "library",
+      "name": "iniconfig",
+      "version": "2.3.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a9827e7d693395433e516d61f5ab2aa944a7c868"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/iniconfig@2.3.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/iniconfig-2.3.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/itsdangerous@2.2.0",
+      "type": "library",
+      "name": "itsdangerous",
+      "version": "2.2.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "2721517496b1b39ca959c37af2bd94a16d2d968e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/itsdangerous@2.2.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/itsdangerous-2.2.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/jaraco.collections@5.1.0",
       "type": "library",
       "name": "jaraco.collections",
       "version": "5.1.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ac0db25aefd2679b4c3265e713d00f6155a94465"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7064,6 +7316,12 @@
       "type": "library",
       "name": "jaraco.context",
       "version": "5.3.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ac9c92013b2f0fc65d741b32a9fe4b956dd6eb7d"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7096,6 +7354,12 @@
       "type": "library",
       "name": "jaraco.functools",
       "version": "4.0.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "b7a18f079de22d10c4c318e54bd8c48177f91333"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7128,6 +7392,12 @@
       "type": "library",
       "name": "jaraco.text",
       "version": "3.12.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "a7763789fa56cebbaa849368faac7d386f170399"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7156,10 +7426,92 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/jinja2@3.1.6",
+      "type": "library",
+      "name": "Jinja2",
+      "version": "3.1.6",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "01c4dcfd579104dd8f5b937e1511e9371b4367d3"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/jinja2@3.1.6",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/jinja2-3.1.6.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/markupsafe@3.0.3",
+      "type": "library",
+      "name": "MarkupSafe",
+      "version": "3.0.3",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "8ada20dd783a9961d87701f2cd25b0880f23993e"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/markupsafe@3.0.3",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/markupsafe-3.0.3.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/more-itertools@10.3.0",
       "type": "library",
       "name": "more-itertools",
       "version": "10.3.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ffccec7fd799cc4ab07530954fef3be2472e2c23"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7192,6 +7544,12 @@
       "type": "library",
       "name": "packaging",
       "version": "24.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "292b8d19cdc308e072817b6407cac3cb5175a060"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7225,10 +7583,52 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/packaging@26.2",
+      "type": "library",
+      "name": "packaging",
+      "version": "26.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c4e54da3e7aeb0a3da164c9aec796dcb9005137b"
+        }
+      ],
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-2-Clause"
+        }
+      ],
+      "purl": "pkg:pypi/packaging@26.2",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/packaging-26.2.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/pip@24.0",
       "type": "library",
       "name": "pip",
       "version": "24.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "5b3d7ef78029003d983670a820dcf068fde4c0c0"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7261,6 +7661,12 @@
       "type": "library",
       "name": "platformdirs",
       "version": "4.2.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "1ac8a3679afcfeec0ba00851f5f8095dd1b060cd"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7289,10 +7695,92 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/pluggy@1.6.0",
+      "type": "library",
+      "name": "pluggy",
+      "version": "1.6.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "2abf7c035cc157e3e320d4f3ad1e75797f074aaf"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/pluggy@1.6.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/pluggy-1.6.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
+      "bom-ref": "pkg:pypi/pytest@8.0.0",
+      "type": "library",
+      "name": "pytest",
+      "version": "8.0.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "ec4ab44ecfa8c6aa765edac04bf914bcde13b3ee"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/pytest@8.0.0",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/pytest-8.0.0.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/setuptools@79.0.1",
       "type": "library",
       "name": "setuptools",
       "version": "79.0.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "4fb88a3c602a0a0f2665a362837a93973e48ab41"
+        }
+      ],
       "purl": "pkg:pypi/setuptools@79.0.1",
       "properties": [
         {
@@ -7318,6 +7806,12 @@
       "type": "library",
       "name": "tomli",
       "version": "2.0.1",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "d3ea3bda227794ae35fe7ffc5bd6e5fa2a5ef250"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7350,6 +7844,12 @@
       "type": "library",
       "name": "typeguard",
       "version": "4.3.0",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "9a94672ccfea06156a5f8a321cd0626cfd233ae8"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7382,6 +7882,12 @@
       "type": "library",
       "name": "typing_extensions",
       "version": "4.12.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "b6ada54b9516d20b69a5dd5cded868da22c5e252"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7410,10 +7916,54 @@
       ]
     },
     {
+      "bom-ref": "pkg:pypi/werkzeug@3.1.8",
+      "type": "library",
+      "name": "Werkzeug",
+      "version": "3.1.8",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "613b8b6cfbd18267696adb2b508e87d63fb1743f"
+        }
+      ],
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "purl": "pkg:pypi/werkzeug@3.1.8",
+      "properties": [
+        {
+          "name": "aquasecurity:trivy:FilePath",
+          "value": "usr/local/lib/python3.11/site-packages/werkzeug-3.1.8.dist-info/METADATA"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDiffID",
+          "value": "sha256:a0cfb7a47e28401e26288cb63757025e67925e50495aa3028be05cbf62971271"
+        },
+        {
+          "name": "aquasecurity:trivy:LayerDigest",
+          "value": "sha256:640d65f2cefad9395ecbee903fa32b464110b078c8cab78dded73562687f37b8"
+        },
+        {
+          "name": "aquasecurity:trivy:PkgType",
+          "value": "python-pkg"
+        }
+      ]
+    },
+    {
       "bom-ref": "pkg:pypi/zipp@3.19.2",
       "type": "library",
       "name": "zipp",
       "version": "3.19.2",
+      "hashes": [
+        {
+          "alg": "SHA-1",
+          "content": "c53b0e6a2e3d94093e2fe4978926a7439b47d43c"
+        }
+      ],
       "licenses": [
         {
           "license": {
@@ -7444,11 +7994,15 @@
   ],
   "dependencies": [
     {
-      "ref": "06ddec28-fceb-49a5-b57f-9403f2bfc7e7",
+      "ref": "7801c540-b3eb-4cf2-b25a-bd611687d420",
       "dependsOn": []
     },
     {
-      "ref": "0cff4407-9e10-4796-aff7-6dc1b8975f4a",
+      "ref": "d6dda5c7-6775-4503-92f8-4f55b5909d86",
+      "dependsOn": []
+    },
+    {
+      "ref": "de5c7cf7-a3a5-4459-9068-847d7d67748b",
       "dependsOn": [
         "pkg:deb/debian/apt@3.0.3?arch=amd64&distro=debian-13.5",
         "pkg:deb/debian/bash@5.2.37-2%2Bb9?arch=amd64&distro=debian-13.5",
@@ -7486,10 +8040,6 @@
         "pkg:deb/debian/tzdata@2026b-0%2Bdeb13u1?arch=all&distro=debian-13.5",
         "pkg:deb/debian/util-linux@2.41-5?arch=amd64&distro=debian-13.5"
       ]
-    },
-    {
-      "ref": "f86ffc8c-ca63-4ebb-85f2-808f6c02dda2",
-      "dependsOn": []
     },
     {
       "ref": "pkg:deb/debian/adduser@3.152?arch=all&distro=debian-13.5",
@@ -8043,27 +8593,38 @@
       ]
     },
     {
-      "ref": "pkg:oci/python@sha256:cdbd05fb6f457ca275ff51ce00d93d865ca0b6a25f5ffb08262d94f6835771e5?arch=amd64&repository_url=index.docker.io%2Flibrary%2Fpython",
+      "ref": "pkg:oci/todo-api@sha256:d113fff60b75cf06121ea760c3fbf59b5b35a7108f6f9e7a4c6e0d15e79bc8f4?arch=amd64&repository_url=index.docker.io%2Flibrary%2Ftodo-api",
       "dependsOn": [
-        "06ddec28-fceb-49a5-b57f-9403f2bfc7e7",
-        "0cff4407-9e10-4796-aff7-6dc1b8975f4a",
-        "f86ffc8c-ca63-4ebb-85f2-808f6c02dda2",
+        "7801c540-b3eb-4cf2-b25a-bd611687d420",
+        "d6dda5c7-6775-4503-92f8-4f55b5909d86",
+        "de5c7cf7-a3a5-4459-9068-847d7d67748b",
         "pkg:pypi/autocommand@2.2.2",
         "pkg:pypi/backports.tarfile@1.2.0",
+        "pkg:pypi/blinker@1.9.0",
+        "pkg:pypi/click@8.4.2",
+        "pkg:pypi/flask@3.0.0",
         "pkg:pypi/importlib-metadata@8.0.0",
         "pkg:pypi/inflect@7.3.1",
+        "pkg:pypi/iniconfig@2.3.0",
+        "pkg:pypi/itsdangerous@2.2.0",
         "pkg:pypi/jaraco.collections@5.1.0",
         "pkg:pypi/jaraco.context@5.3.0",
         "pkg:pypi/jaraco.functools@4.0.1",
         "pkg:pypi/jaraco.text@3.12.1",
+        "pkg:pypi/jinja2@3.1.6",
+        "pkg:pypi/markupsafe@3.0.3",
         "pkg:pypi/more-itertools@10.3.0",
         "pkg:pypi/packaging@24.2",
+        "pkg:pypi/packaging@26.2",
         "pkg:pypi/pip@24.0",
         "pkg:pypi/platformdirs@4.2.2",
+        "pkg:pypi/pluggy@1.6.0",
+        "pkg:pypi/pytest@8.0.0",
         "pkg:pypi/setuptools@79.0.1",
         "pkg:pypi/tomli@2.0.1",
         "pkg:pypi/typeguard@4.3.0",
         "pkg:pypi/typing-extensions@4.12.2",
+        "pkg:pypi/werkzeug@3.1.8",
         "pkg:pypi/zipp@3.19.2"
       ]
     },
@@ -8076,11 +8637,31 @@
       "dependsOn": []
     },
     {
+      "ref": "pkg:pypi/blinker@1.9.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/click@8.4.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/flask@3.0.0",
+      "dependsOn": []
+    },
+    {
       "ref": "pkg:pypi/importlib-metadata@8.0.0",
       "dependsOn": []
     },
     {
       "ref": "pkg:pypi/inflect@7.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/iniconfig@2.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/itsdangerous@2.2.0",
       "dependsOn": []
     },
     {
@@ -8100,6 +8681,14 @@
       "dependsOn": []
     },
     {
+      "ref": "pkg:pypi/jinja2@3.1.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/markupsafe@3.0.3",
+      "dependsOn": []
+    },
+    {
       "ref": "pkg:pypi/more-itertools@10.3.0",
       "dependsOn": []
     },
@@ -8108,11 +8697,23 @@
       "dependsOn": []
     },
     {
+      "ref": "pkg:pypi/packaging@26.2",
+      "dependsOn": []
+    },
+    {
       "ref": "pkg:pypi/pip@24.0",
       "dependsOn": []
     },
     {
       "ref": "pkg:pypi/platformdirs@4.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pluggy@1.6.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pytest@8.0.0",
       "dependsOn": []
     },
     {
@@ -8129,6 +8730,10 @@
     },
     {
       "ref": "pkg:pypi/typing-extensions@4.12.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/werkzeug@3.1.8",
       "dependsOn": []
     },
     {
